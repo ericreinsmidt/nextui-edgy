@@ -23,16 +23,15 @@ All other UI sprites are left untouched.
 
 ## Install
 
-1. Download `Edgy.pak.zip` from [Releases](https://github.com/ericreinsmidt/nextui-edgy/releases)
-2. Unzip and copy `Edgy.pak` to `Tools/tg5040/` on your SD card
-3. Launch **Edgy** from the Tools menu
-4. Reboot to see the change
+1. Download the zip for your platform from [Releases](https://github.com/ericreinsmidt/nextui-edgy/releases)
+2. Unzip and copy `Edgy.pak` to `Tools/tg5040/` (or `Tools/tg5050/`) on your SD card
+3. Launch **Edgy** from the Tools menu — the change applies immediately
 
 ## Uninstall
 
-Run **Edgy** again to restore the original sprites, then reboot. Alternatively, a NextUI update will reset the sprites automatically.
+Run **Edgy** again to restore the original sprites. A NextUI update will also reset the sprites automatically.
 
 ## Compatibility
 
-- **Platforms:** TrimUI Brick, Brick Hammer, Smart Pro (tg5040)
+- **Platforms:** TrimUI Brick, Brick Hammer, Smart Pro (tg5040), Smart Pro S (tg5050)
 - **NextUI version:** Built against the current sprite sheet layout. If a future NextUI update changes the asset layout, the pak will be updated to match.
