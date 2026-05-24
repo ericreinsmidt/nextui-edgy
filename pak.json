@@ -5,9 +5,10 @@
   "description": "Replaces rounded pill selection highlights with squared corners. Run again to restore originals.",
   "author": "Eric Reinsmidt",
   "repo_url": "https://github.com/ericreinsmidt/nextui-edgy",
-  "release_filename": "Edgy.tg5040.pak.zip",
+  "release_filename": "Edgy.{platform}.pak.zip",
   "platforms": [
-    "tg5040"
+    "tg5040",
+    "tg5050"
   ],
   "changelog": {
     "v1.0.0": "Initial release. Squared pill highlights with toggle restore."

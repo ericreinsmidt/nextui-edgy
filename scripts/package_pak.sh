@@ -3,44 +3,46 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-PLATFORM="tg5040"
-PAK_DIR="$PROJECT_DIR/ports/$PLATFORM/pak"
 DIST_DIR="$PROJECT_DIR/dist"
 PAK_JSON="$PROJECT_DIR/pak.json"
 
 APP_NAME="$(grep -E '"name"' "$PAK_JSON" | head -n1 | cut -d'"' -f4)"
-RELEASE_FILENAME="$(grep -E '"release_filename"' "$PAK_JSON" | head -n1 | cut -d'"' -f4)"
 
-echo ""
-echo "=== Packaging ${APP_NAME} for ${PLATFORM} ==="
-echo ""
-
-if [ -z "$APP_NAME" ] || [ -z "$RELEASE_FILENAME" ]; then
-    echo "ERROR: Failed to read name or release_filename from pak.json"
+if [ -z "$APP_NAME" ]; then
+    echo "ERROR: Failed to read name from pak.json"
     exit 1
 fi
 
-if [ ! -f "$PAK_DIR/launch.sh" ]; then
-    echo "ERROR: Missing launch.sh in pak directory"
-    exit 1
-fi
-
-# Create clean zip via temp dir (excludes .DS_Store)
 mkdir -p "$DIST_DIR"
-TMP_DIR="$DIST_DIR/tmp-package"
-rm -rf "$TMP_DIR"
-mkdir -p "$TMP_DIR"
 
-rsync -a --exclude='.DS_Store' "$PAK_DIR/" "$TMP_DIR/"
+for PLATFORM in tg5040 tg5050; do
+    PAK_DIR="$PROJECT_DIR/ports/$PLATFORM/pak"
 
-OUTPUT_ZIP="$DIST_DIR/$RELEASE_FILENAME"
-rm -f "$OUTPUT_ZIP"
-cd "$TMP_DIR"
-zip -r "$OUTPUT_ZIP" ./*
-cd "$PROJECT_DIR"
-rm -rf "$TMP_DIR"
+    if [ ! -f "$PAK_DIR/launch.sh" ]; then
+        echo "Skipping $PLATFORM — no launch.sh"
+        continue
+    fi
+
+    echo ""
+    echo "=== Packaging ${APP_NAME} for ${PLATFORM} ==="
+    echo ""
+
+    TMP_DIR="$DIST_DIR/tmp-package"
+    rm -rf "$TMP_DIR"
+    mkdir -p "$TMP_DIR"
+
+    rsync -a --exclude='.DS_Store' "$PAK_DIR/" "$TMP_DIR/"
+
+    OUTPUT_ZIP="$DIST_DIR/${APP_NAME}.${PLATFORM}.pak.zip"
+    rm -f "$OUTPUT_ZIP"
+    cd "$TMP_DIR"
+    zip -r "$OUTPUT_ZIP" ./*
+    cd "$PROJECT_DIR"
+    rm -rf "$TMP_DIR"
+
+    echo "Output: dist/${APP_NAME}.${PLATFORM}.pak.zip"
+done
 
 echo ""
-echo "=== Package complete ==="
-echo "Output: dist/$RELEASE_FILENAME"
+echo "=== Done ==="
 echo ""
